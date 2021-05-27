@@ -1,10 +1,8 @@
-const Person = require(__dirname + '/Person.js'); //可以不要加副檔名 先js檔再json檔
+//我們宣告了一個Person物件，用require方法載入/Person.js檔案，他會回傳一個物件
+//Person.js可以不要加副檔名，它會自己抓，優先順序是先js檔再json檔
+const Person = require(__dirname + '/Person.js');  //引入模組
 
-// console.log(f1(8)); //引用不到function01.js的f1
-// console.log(Person);
-
-
-const p2 = new Person('Andy',27);
+const p2 = new Person('Andy',27); //使用new建立一個擁有Person類別的物件
 
 
 

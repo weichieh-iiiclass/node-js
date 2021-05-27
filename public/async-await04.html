@@ -12,8 +12,6 @@
     <script>
 
         
-        // 匿名function ，寫成立即執行函式，只執行一次
-        // 
         function myPromise() {
             return new Promise((resolve, reject) => {
                 const rnd = Math.random() * 1500;
@@ -22,14 +20,18 @@
                 }, rnd);
             });
         }
-
+        
+        
         // (async function(){
-        // })();
-
-        // (function(){
-        // }());
-
-        /*
+            // })();
+            
+            // (function(){
+                // }());
+                
+        // 匿名function ，寫成立即執行函式(IIFE,Immediately Invoked Functions Expressions)，只執行一次
+        // 參考: https://ithelp.ithome.com.tw/articles/10193313
+        
+        /* //寫法一:
         (async ()=>{
             const r1 = await myPromise();
             console.log(1, r);
@@ -42,8 +44,8 @@
         })();
         */
 
-        //  這種寫法可以使用迴圈跑，前面的.then寫法不行
-        /*
+        //  這種寫法可以使用迴圈跑，前面promise03.html的.then寫法不行
+        /* //寫法二:改用for loop
         (async ()=>{
             for (let i=1; i<10; i++){
                 console.log(i, await myPromise());
@@ -51,7 +53,7 @@
         })();
         */
 
-        // 兩個promise並不會按照順序執行  
+        // 以下兩個promise並不會按照順序執行  
         // 只能確保單一個async await內部會按照順序，但兩個async會穿插  
         // 可以寫成一個async或是把第二個async用.then()放在後線
         (async ()=>{
@@ -65,7 +67,7 @@
             }
         })();
 
-        //單一個async就會依照順序執行，前面for loop先跑完，再跑後面的
+        //改寫成這樣，單一個async就會依照順序執行，前面for loop先跑完，再跑後面的
         (async ()=>{
             for (let i=1; i<10; i++){
                 console.log(i, await myPromise());

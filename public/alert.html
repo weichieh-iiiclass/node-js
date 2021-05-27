@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="info"></div>
+    
+    <script>
+        // alert confirm prompt
+        // 古老的語法，會讓主執行續卡住停下來
+        //操作DOM很吃效能，有，可能DOM已經變更，但還沒反應到畫面上，所以alert會先出來，之後才是這行
+        document.querySelector('#info').innerHTML = `<h2>Hello</h2>`;       
+        alert('您好');
+        
+    </script>
+</body>
+</html>

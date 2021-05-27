@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>promise01</title>
+</head>
+
+<body>
+    <script>
+
+        
+        // 匿名function ，寫成立即執行函式，只執行一次
+        // 
+        function myPromise() {
+            return new Promise((resolve, reject) => {
+                const rnd = Math.random() * 1500;
+                setTimeout(function () {
+                    resolve(rnd);
+                }, rnd);
+            });
+        }
+
+        // (async function(){
+        // })();
+
+        // (function(){
+        // }());
+
+        /*
+        (async ()=>{
+            const r1 = await myPromise();
+            console.log(1, r);
+
+            console.log(2, await myPromise());
+            console.log(3, await myPromise());
+            console.log(4, await myPromise());
+            console.log(5, await myPromise());
+
+        })();
+        */
+
+        //  這種寫法可以使用迴圈跑，前面的.then寫法不行
+        /*
+        (async ()=>{
+            for (let i=1; i<10; i++){
+                console.log(i, await myPromise());
+            }
+        })();
+        */
+
+        // 兩個promise並不會按照順序執行  
+        // 只能確保單一個async await內部會按照順序，但兩個async會穿插  
+        // 可以寫成一個async或是把第二個async用.then()放在後線
+        (async ()=>{
+            for (let i=1; i<10; i++){
+                console.log(i, await myPromise());
+            }
+        })();
+        (async ()=>{
+            for (let i=1; i<10; i++){
+                console.log(String.fromCharCode(64+i), await myPromise());
+            }
+        })();
+
+        //單一個async就會依照順序執行，前面for loop先跑完，再跑後面的
+        (async ()=>{
+            for (let i=1; i<10; i++){
+                console.log(i, await myPromise());
+            }
+            for (let i=1; i<10; i++){
+                console.log(String.fromCharCode(64+i), await myPromise());
+            }
+        })();
+        
+       
+    </script>
+</body>
+
+</html>

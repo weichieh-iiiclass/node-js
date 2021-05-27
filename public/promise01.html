@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>promise01</title>
+</head>
+<body>
+    <script>
+        // promise 是ES6才有的類型
+        // 為了解決callback funciton hell
+        // 功能上沒問題，維護上有問題(沒效率)
+        // 
+        // warning:警告而已
+        // error:下面程式碼不會執行
+        // .catch只有Promise可以用
+        // 其他的要用try{} catch{}
+
+        new Promise((resolve, reject)=>{ //接收到的是function
+            const rnd = Math.random()*1500;
+            setTimeout(function(){
+                resolve('1:'+ rnd);
+                // reject('error------');
+                }, rnd);
+        })
+        .then(r =>{
+            console.log(r);
+            throw new Error('my error');
+        })
+        // 錯誤處理通常放在then後面
+        .catch( err => {
+            console.log(err);
+        });
+    </script>
+</body>
+</html>

@@ -21,7 +21,7 @@
             console.log(r); 
             return 7;
         })
-        .then(r => {
+        .then(r => { //上面的7會帶進去r
             console.log(r); 
             return new Promise((resolve, reject) => { //接收到的是function
             const rnd = Math.random() * 1500;
@@ -30,10 +30,13 @@
                 }, rnd);
             });
         })
-        .then(r => { //上面的7會帶進去r
+        .then(r => { 
             console.log(r);
         })
             
+        //1:24.806438437834476 (ine:21)
+        // 7  (ine:25)
+        // 2:1456.7870144604076 (ine:34)
     </script>
 </body>
 

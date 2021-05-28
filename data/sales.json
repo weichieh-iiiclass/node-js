@@ -1,0 +1,18 @@
+[
+    {
+        "name": "Bill",
+        "age": 28,
+        "id": "A001",
+        "mycomment": "array裡面有obj"
+    },
+    {
+        "name": "Peter",
+        "age": 32,
+        "id": "A002"
+    },
+    {
+        "name": "Carl",
+        "age": 29,
+        "id": "A003"
+    }
+]

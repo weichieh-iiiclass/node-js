@@ -1,0 +1,27 @@
+### 這個Rest Client是簡易版的post man
+### 沒辦法測試檔案的上傳
+
+GET http://localhost:3000/
+
+### 分隔線 下面可以再建立其他request
+
+GET http://localhost:3000/try-qs?a[name]=bill&a[age]=25
+
+### 資料前面要空一行
+### 要有app.use(express.urlencoded({extended:false}));下面這個request的res才有東西
+
+POST http://localhost:3000/try-post
+Content-Type: application/x-www-form-urlencoded;charset=utf-8
+
+name=小新&age=30
+
+### 要用fetch或是AJAX的方式去送才可以
+### JSON
+
+POST http://localhost:3000/try-post
+Content-Type: application/json;charset=utf-8
+
+{
+    "name":"david",
+    "age":28
+}

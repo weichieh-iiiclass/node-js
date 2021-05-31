@@ -1,0 +1,58 @@
+<%- include('./parts/html-head') %>
+<%- include('./parts/navbar') %>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">表單測試</h5>
+                            <!-- 表單欄位(元素) input text-area select -->
+                            <!-- div label small 不會送資料 跟外觀有關 -->
+                            <!-- form裡面一定要有name, 一個頁面裡面只有一個id -->
+                            <!-- enctype用預設 -->
+                            <form method="POST" novalidate>
+                                <div class="form-group">
+                                    <!-- 使用type email 會檢查@ 但如果下了novalidate就不會檢查-->
+                                    <label for="email">Email address</label>
+                                    <input type="email" class="form-control" id="email" name="email">
+                                    <% if(typeof email !=='undefined' ) { %>
+                                        <small class="form-text text-muted">
+                                            <%= email %>
+                                        </small>
+                                        <% } %>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">Password</label>
+                                    <input type="password" class="form-control" id="password" name="password">
+                                    <!-- locals是樣板裡面的預設物件，有值的話會是true -->
+                                    <% if(locals.password){ %>
+                                        <small class="form-text text-muted">
+                                            <%= password %>
+                                        </small>
+                                        <% } %>
+                                </div>
+                                <div class="form-group form-check">
+                                    <input type="checkbox" class="form-check-input" id="exampleCheck1"
+                                        name="exampleCheck1">
+                                    <label class="form-check-label" for="exampleCheck1" value="1">Check me out</label>
+                                    <!-- for="exampleCheck1"是點字就可以打勾 -->
+                                    <!-- 沒有勾選的話送出不會有這個欄位 -->
+                                    <!-- 後端是php才寫成exampleCheck1[] -->
+                                </div>
+                                <div class="form-group form-check">
+                                    <!-- name一樣 id不一樣所以傳值後會變成array -->
+                                    <input type="checkbox" class="form-check-input" id="exampleCheck2"
+                                        name="exampleCheck1">
+                                    <label class="form-check-label" for="exampleCheck1" value="2">Check me out</label>
+                                    <!-- for="exampleCheck1"是點字就可以打勾 -->
+                                </div>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<%- include('./parts/scripts') %>
+<%- include('./parts/html-foot') %>

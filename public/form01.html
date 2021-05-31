@@ -8,8 +8,15 @@
 </head>
 <body>
     <!-- 傳統的form method只有post跟get方法 -->
-    <form action="" method="POST">
-        <input type="text" name="nickname">
+    <!-- method 預設值是get -->
+    <!-- bodyparser  只能處理:application/x-www-form-urlencoded(是預設值)-->
+    <!-- 如果要處理上傳檔案(multipart/form-data)的話，bodyparser不能處理 -->
+    <!-- 如果要看有沒有處理成功，可以去檢查/Network/點try-post/Form Data的view source查看 -->
+    <form action="/try-post" method="POST" enctype="application/x-www-form-urlencoded"> 
+        <!-- 表單的欄位只能下name，沒有name的會被忽略 -->
+        <input type="text" id="nickname">
+        <input type="hidden" name="say" value="hello">
+
         <br>
         <input type="submit">
     </form>

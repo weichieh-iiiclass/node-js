@@ -1,14 +1,17 @@
-require('dotenv').config();
-const port = process.env.PORT || 3000;
-const express = require('express'); 
 
-//呼叫它，拿到express的實體
+require('dotenv').config();  // 連環境參數
+const port = process.env.PORT || 3000;
+const express = require('express');  // 連express
+
+// 呼叫它，拿到express的實體
 const app = express(); 
 
-//放在所有路由的前面，需要建立一個views資料夾
+// 在 Express 中使用範本引擎ejs(把「呈現」和「邏輯處理」分開，易於管理。)
+// 放在所有路由的前面，需要建立一個views資料夾
 app.set('view engine', 'ejs'); 
 
 // 靜態內容通常放前面
+// 參考:https://ithelp.ithome.com.tw/articles/10186000
 // public會變成網站的根目錄(所以public內的檔案可以直接接在localhost:3000/後面)
 // 寫法1:因為啟動server的路徑在最外層，往下看剛好看到public
 // app.use(exprss.static('public')); 
@@ -17,7 +20,7 @@ app.use(express.static(__dirname + '/../public'));
 
 //---------- 定義路由開始 (路由一定是/開頭)---------- 
 // express的路由，先定義的優先
-app.get('/abc/def',(req, res)=>{ 
+app.get('/',(req, res)=>{ 
     // 用get方法發送的req，必須路徑跟方法都符合
     // res.send('hello'); //send是html
     //home不用副檔名

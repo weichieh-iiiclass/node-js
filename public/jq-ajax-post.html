@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- 原則上css link放哪裡都可以，但放在!DOC之前會被html5的樣式覆蓋 -->
+    <link rel="stylesheet" href="./bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="./fontawesome/css/all.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- onsubmit="return false;"無法送出表單 -->
+        <!-- event.preventDefault()避免執行預設行為 這裡的event是submit-->
+        <!-- 定義事件處理器onclick, onsubmit因為內容會被包成function -->
+        <!-- onsubmit="send(); return false;" 才能夠正常顯示info -->
+        <form name="form1" method="POST" novalidate onsubmit="send(); return false;">
+            <div class="form-group">
+                <!-- 使用type email 會檢查@ 但如果下了novalidate就不會檢查-->
+                <label for="email">Email address</label>
+                <input type="email" class="form-control" id="email" name="email">
+                
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password">
+                <!-- locals是樣板裡面的預設物件，有值的話會是true -->
+                
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <br>
+        <div id="info"></div>
+    </div>
+    <script src="./lib/jquery-3.6.0.js"></script>
+    <script src="./bootstrap/js/bootstrap.bundle.js"></script>
+    <script>
+        const send = () => {
+            // .serialize()把表單欄位抓進來 
+            $.post('/try-post', $(document.form1).serialize(), function (data) {
+                console.log(data);
+                // 只用一個id名稱會變成全域的變數，但不建議這樣使用
+                info.innerHTML += JSON.stringify(data) + '<br>';
+            }, 'json');
+            
+        };
+    </script>
+</body>
+
+</html>

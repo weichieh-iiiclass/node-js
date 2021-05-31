@@ -2,10 +2,6 @@
 require('dotenv').config();  // 連環境參數
 const port = process.env.PORT || 3000;
 const express = require('express');  // 連express
-const multer = require('multer');
-const upload = multer({dest:'tmp_uploads/'}); //設定暫存的資料夾
-const {v4: uuidv4} = require('uuid'); //把v4改名為uuidv4
-const fs = require('fs');
 
 // 呼叫它，拿到express的實體
 const app = express(); 
@@ -60,45 +56,7 @@ app.post('/try-post-form', (req, res)=>{
     
 });
 
-const extMap ={
-    'image/png':'.png',
-    'image/jpeg': '.jpg',
-};
 
-// get不需用到middleware，用傳統方式上傳檔案
-// 在原本的/try-upload路由新增一個get
-app.get('/try-upload', (req, res)=>{
-    res.render('try-upload');
-});
-
-// 上傳的欄位名稱叫avatar，single最多一次上傳一個檔案
-app.post('/try-upload', upload.single('avatar'), async (req, res)=>{
-    console.log(req.file);//會把上傳的檔案放到req.file
-    let newName = '';
-    if(extMap[req.file.mimetype]){ //有對應到mimetype才會執行，undefined會看成false，newName=空字串代表上傳的檔案是錯的
-        newName = uuidv4() + extMap[req.file.mimetype];
-        await fs.rename(req.file.path, './public/img/' + newName, error=>{});
-    }
-
-    res.json({
-           file: req.file,
-           body: req.body,
-           newName,
-        });
-});
-// 上傳的欄位名稱叫photo，array最多一次上傳6個檔案
-app.post('/try-uploads', upload.array('photo', 6), (req, res)=>{
-    console.log(req.files);//會把上傳的檔案放到req.files(注意有s)
-    res.json({
-           file: req.files,
-           body: req.body,
-        });
-});
-
-app.get('/pending', (req, res)=>{
-    
-
-});
 
 //404路由定義，要放在所有路由的後面，避免蓋到其他的設定
 app.use((req, res) =>{ 

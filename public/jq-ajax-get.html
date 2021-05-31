@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- 原則上css link放哪裡都可以，但放在!DOC之前會被html5的樣式覆蓋 -->
+    <link rel="stylesheet" href="./bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="./fontawesome/css/all.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <button class="btn btn-primary" onclick="send()">send get request</button>
+        <br>
+        <textarea name="" id="ta" cols="30" rows="10"></textarea>
+        <i class="fas fa-trash-alt"></i>
+    </div>
+    <script src="./lib/jquery-3.6.0.js"></script>
+    <script src="./bootstrap/js/bootstrap.bundle.js"></script>
+    <script>
+        const send = () =>{
+            // jQuery.get()，可在網頁的console裡打jQuery，看到是一個function代表他有用
+            // $.ajax功能比較多但比較瑣碎一點
+
+            // 寫法1: (較常用)
+            $.get('/try-qs', {name:'Flora', age:22}, function(data){
+                console.log(data);
+                $('#ta').val(JSON.stringify(data));
+            },'json');
+            // 第4個參數加上'text'他就不會幫你轉換
+            // 加上'json'就會幫你轉字串(就會看不見裡面的內容 只看到[object Object])
+
+            // 寫法2:
+            // $.get('/try-qs', 'name=Flora&age=22', function(data){
+            //     console.log(data);
+            //     $('#ta').val(JSON.stringify(data));
+            // },'json');
+        };
+    </script>
+</body>
+
+</html>

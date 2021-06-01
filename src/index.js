@@ -33,6 +33,7 @@ app.get('/try-qs', (req, res)=>{
     res.json(req.query);
 });
 
+// 搭配form01.html
 app.post('/try-post', (req, res)=>{  
     res.json(req.body); // 有middleware才會有東西，從req那邊做解析，放到req.body裡
 });

@@ -21,7 +21,7 @@ app.use(express.static(__dirname + '/../public'));
 // express的路由，先定義的優先
 app.get('/',(req, res)=>{ 
     // 用get方法發送的req，必須路徑跟方法都符合
-    // res.send('hello'); //send是html
+    // res.send('hello'); //使用樣板就不使用req.send()因為他是html
     //home不用副檔名
     res.render('home', {name: 'Jessica'}); 
 });

@@ -14,7 +14,7 @@
     <!-- 如果要看有沒有處理成功，可以去檢查/Network/點try-post/Form Data的view source查看 -->
     <form action="/try-post" method="POST" enctype="application/x-www-form-urlencoded"> 
         <!-- 表單的欄位只能下name，沒有name的會被忽略 -->
-        <input type="text" id="nickname">
+        <input type="text" name="me" id="nickname">
         <input type="hidden" name="say" value="hello">
 
         <br>

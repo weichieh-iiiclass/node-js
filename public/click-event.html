@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- 原則上css link放哪裡都可以，但放在!DOC之前會被html5的樣式覆蓋 -->
+    <link rel="stylesheet" href="./bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="./fontawesome/css/all.css">
+</head>
+
+<body>
+
+    <button id="btn1" onclick="console.log(1)">btn1</button>
+    <br>
+    <button id="btn2" >btn2</button>
+
+
+    <script src="./lib/jquery-3.6.0.js"></script>
+    <script src="./bootstrap/js/bootstrap.bundle.js"></script>
+    <script>
+        const btn1 = document.querySelector('#btn1');
+        const btn2 = document.querySelector('#btn2');
+
+        const f = (event)=>{
+            console.log(5);
+            console.log(event.target);
+        };
+
+        btn.onclick = function(event){
+            console.log(2); //會覆蓋掉行內的console.log(1)
+        };
+
+        //註冊兩次出現兩次，因為相當於建立兩個新的function，所以會是兩個不同的參照
+        btn1.addEventListener('click', (event)=>{ 
+            console.log(3);
+        });
+        btn1.addEventListener('click', (event)=>{
+            console.log(4);
+        });
+
+        //註冊三次只出現一次，做三次跟做一次是一樣的，因為addEventListener會去判斷是否為同一個參照，用addEventListener才可以一對多或多對一
+        btn1.addEventListener('click', f); 
+        btn1.addEventListener('click', f); 
+        btn1.addEventListener('click', f);
+
+
+    </script>
+</body>
+
+</html>

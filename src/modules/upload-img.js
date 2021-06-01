@@ -6,7 +6,7 @@ const extMap = {
     'image/png': '.png',
     'image/gif': '.gif',
     'image/webp': '.webp',
-}
+};
 
 const storage = multer.diskStorage({
     destination : (req, file, cb)=>{ //相當於路由的req
@@ -21,3 +21,5 @@ const storage = multer.diskStorage({
 const fileFilter = (req, file, cb)=>{
     cb(null, !!extMap[file.mimetype]); //null= 沒有錯誤 //!!(not not):轉boolean值true/false
 };
+
+module.exports = multer({storage, fileFilter});

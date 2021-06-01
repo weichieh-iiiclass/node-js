@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- 原則上css link放哪裡都可以，但放在!DOC之前會被html5的樣式覆蓋 -->
+    <link rel="stylesheet" href="./bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="./fontawesome/css/all.css">
+    <style>
+        .box {
+            background-color: pink;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="box">
+        <button id="btn1" onclick="console.log(1)"><span>btn1</span></button>
+        <br>
+        <button id="btn2">btn2</button>
+
+    </div>
+
+
+    <script src="./lib/jquery-3.6.0.js"></script>
+    <script src="./bootstrap/js/bootstrap.bundle.js"></script>
+    <script>
+        const btn1 = document.querySelector('#btn1');
+        const btn2 = document.querySelector('#btn2');
+
+        const f = (event) => {
+            console.log('event.target',event.target); //事件觸發的來源(最內層的元素)，只能是元素，text不是元素element
+            console.log('event.currentTarget',event.currentTarget); //註冊事件處理器的那個物件
+        };
+
+        document.body.addEventListener('click',f); // 註冊者:document.body
+
+      
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+<%- include('./parts/html-head') %>
+<%- include('./parts/navbar') %>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">登入</h5>
+                    <!-- 使用ajax的方法傳送 onsubmit="checkForm()"-->
+                    <form name="form1" method="POST" novalidate onsubmit="checkForm(); return false">
+                        <div class="form-group">
+                            <label for="account">account</label>
+                            <input type="text" class="form-control" id="account" name="account">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" id="password" name="password">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">登入</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('./parts/scripts') %>
+<script>
+    function checkForm(){
+        // TODO: 檢查欄位格式
+        $.post('',$(document.form1).serialize(), function(data){ //空字串表示相同url 但使用post會到index.js的app.post
+            console.log(data);
+        }, 'json');
+    }
+</script>
+<%- include('./parts/html-foot') %>

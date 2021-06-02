@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>push state</title>
+    
+</head>
+
+<body>
+    <!-- history屬於window的子物件 -->
+    <button onclick="p()">test push state</button>
+    <script>
+        // 這裡的push和pop類似array的push,pop
+        // 但是無法刷新頁面
+        let i = 1;
+        function p() {
+            history.pushState({
+                name: 'jessica',
+                age: ++i,
+            }, '', 'myurl'+i);
+        }
+
+        // 舊式寫法，用戶操作上一頁,下一頁的時候會觸發onpopstate
+        window.onpopstate = function(event){
+            console.log(event.state);
+        }
+        
+    </script>
+</body>
+
+</html>

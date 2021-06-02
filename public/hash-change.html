@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hash-change</title>
+    <style>
+        #info {
+            position: fixed;
+            top: 0;
+            right: 0;
+        }
+        .box {
+            position: relative;
+            width: 500px;
+            height: 800px;
+            background-color: pink;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 點hashtag會捲到那個物件所在的地方 -->
+    <!-- 是頁面內的連結，所以不會刷新頁面，缺點是只能放一個字串，特色是可以bookmark起來 -->
+    <!-- 頁面url、querystring、hashtag -->
+    <div id="info">
+        <a href="#aaa">aaa</a><br>
+        <a href="#bbb">bbb</a><br>
+        <a href="#ccc">ccc</a><br>
+    </div>
+    <div id="aaa" class="box" style="background-color: cornflowerblue;">aaa</div>
+    <div id="bbb" class="box" style="background-color: rgb(100, 237, 123);">bbb</div>
+    <div id="ccc" class="box" style="background-color: rgb(237, 228, 100);">ccc</div>
+
+    <script>
+       function hashHandler() {
+           let h = location.hash;
+           if(h.length<2){
+               h='aaa';
+           } else {
+               h = h.slice(1);
+           }
+           console.log(h);
+       }
+       window.addEventListener('hashchange', hashHandler);
+       hashHandler(); //一開始到頁面時就先自動執行一次
+    </script>
+</body>
+
+</html>

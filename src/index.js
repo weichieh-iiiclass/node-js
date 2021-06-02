@@ -31,14 +31,18 @@ app.use(express.json());
 // 靜態內容通常放前面
 app.use(express.static(__dirname + '/../public')); //前面省略根目錄
 
-// 全域的middleware
+// 全域的middleware，因為要用到session所以要放在app.use(session)後面
 // 進到middleware先設定res.locals
 // middle 過濾器: 拿到req,res，針對這兩個加工，第一個完成之後給第二個middle
 app.use((req, res, next)=>{
-    res.locals = { 
-        email: '全域的middleware: email',
-        password: '全域的middleware: password',
-    }
+    // res.locals = { 
+    //     email: '全域的middleware: email',
+    //     password: '全域的middleware: password',
+    // }; 
+
+    // 有登入的話把資料傳給templates的admin變數，沒登入會是空物件
+    // 因為是在全域，所以後面的路由都會吃到這個設定
+    res.locals.admin = req.session.admin || {}; //把登入的管理者資料放到locals傳給templates
     next(); //不加的話會pending
 });
 
@@ -138,13 +142,54 @@ app.get('/try-sess', (req, res)=>{
 });
 
 app.get('/login', (req, res)=>{
-    res.render('login');
+    if(req.session.admin){ //如果admin不是undefined，已登入
+        res.redirect('/');
+    } else {
+        res.render('login');
+    }
 });
 app.post('/login', (req, res)=>{
-    res.json(req.body);
+    const accounts = {
+        wei: {
+            nickname: '小倢',
+            pw: 'wei',
+        },
+        sun: {
+            nickname: '晴晴',
+            pw: 'sun',
+        },
+    };
+    const output = {
+        success: false,
+        code: 0, //除錯方便追蹤
+        error: '帳號或密碼錯誤',
+        body: req.body, //除錯檢查
+    }
+
+    // 有沒有值是不是個物件, 有沒有account這個欄位, 把這個帳號當作key丟到accounts就會拿到那個物件，代表帳號比對ok
+    if(req.body && req.body.account && accounts[req.body.account]){
+        output.code = 100;
+        const item = accounts[req.body.account];
+        // 密碼核對ok //&&邏輯運算子(只有not優先權最高)，===關係運算子(優先權比較高，會先做)
+        if(req.body.password && req.body.password===item.pw){ 
+            
+            req.session.admin = {
+                account: req.body.account,
+                ...item, //copy,nickname&password都會進來
+            }
+            output.success = true;
+            output.error = '';
+            output.code = 200; //這邊的自訂義200跟網頁定義的200(頁面正常就會是200)不同
+
+        }
+    }
+
+    res.json(output);
 });
 app.get('/logout', (req, res)=>{
-    
+    //刪除req.session的admin屬性
+    delete req.session.admin;
+    res.redirect('/'); //轉向頁面，後面不該出現res.send,end,render等
 });
 
 //404路由定義，要放在所有路由的後面，避免蓋到其他的設定

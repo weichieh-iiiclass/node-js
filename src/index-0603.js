@@ -22,7 +22,7 @@ app.use(session({
     saveUninitialized: false,
     resave: false,
     secret: 'lgheuifunldaoiewaifebwfoweafewd', //加密cookie
-    cookie: { 
+    cookie: { //這裡指的是存放在cookie裡的sessionid
         maxAge: 1200000,
     }
 }));
@@ -32,9 +32,18 @@ app.use(express.json());
 // 靜態內容通常放前面
 app.use(express.static(__dirname + '/../public')); //前面省略根目錄
 
-// 全域的middleware，會用到session
+// 全域的middleware，因為要用到session所以要放在app.use(session)後面
+// 進到middleware先設定res.locals
+// middle 過濾器: 拿到req,res，針對這兩個加工，第一個完成之後給第二個middle
 app.use((req, res, next)=>{
-    res.locals.admin = req.session.admin || {}; 
+    // res.locals = { 
+    //     email: '全域的middleware: email',
+    //     password: '全域的middleware: password',
+    // }; 
+
+    // 有登入的話把資料傳給templates的admin變數，沒登入會是空物件
+    // 因為是在全域，所以後面的路由都會吃到這個設定
+    res.locals.admin = req.session.admin || {}; //把登入的管理者資料放到locals傳給templates
     next(); //不加的話會pending
 });
 
@@ -59,6 +68,11 @@ app.post('/try-post', (req, res)=>{
 
 // 路徑一樣，方法不同 get post
 app.get('/try-post-form', (req, res)=>{ 
+    // res.locals = { 
+    //     email: '這是預設email',
+    //     password: '這是預設password',
+    // }
+    // res.render('try-post-form', {email:'', password:''});
     res.render('try-post-form');
     
 });
@@ -91,6 +105,7 @@ app.post('/try-uploads', upload.array('photo', 6), (req, res)=>{
 });
 
 app.get('/pending', (req, res)=>{
+    
 });
 
 // action id是代稱(類似變數名稱)
@@ -100,9 +115,10 @@ app.get('/my-params1/:action?/:id?', (req, res)=>{
 
 // i: case ignore,-?:選擇性的
 app.get(/\/m\/09\d{2}-?\d{3}-?\d{3}$/i, (req, res)=>{
-    let u = req.url.slice(3);   //去除/m/
+    let u = req.url.slice(3); //去除/m/
     u = u.split('?')[0];        //去除query string ?後面的東西
-    u = u.replace(/-/g, '');    //去除global的-
+    u = u.replace(/-/g, ''); //去除global的-
+    // u = u.split('-').join('');  // 去除-
     res.send(`<h2>${u}</h2>`);
 });
 

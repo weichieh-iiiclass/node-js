@@ -62,12 +62,11 @@ app.get('/try-qs', (req, res)=>{
 
 // 搭配form01.html
 app.post('/try-post', (req, res)=>{  
-    res.json(req.body); // 有middleware才會有東西，從req那邊做解析，放到req.body裡
+    res.json(req.body); 
 });
 
 // 路徑一樣，方法不同 get post
 app.get('/try-post-form', (req, res)=>{ 
-    //會進到templates的變數都會掛在locals身上，templates是回應給客戶的樣板，所以掛在res身上
     // res.locals = { 
     //     email: '這是預設email',
     //     password: '這是預設password',
@@ -108,18 +107,13 @@ app.get('/pending', (req, res)=>{
     
 });
 
-// action id是代稱(類似變數名稱)，如果*拿到的是array(但不建議)
-// http://localhost:3000/my-params1/edit/15
+// action id是代稱(類似變數名稱)
 app.get('/my-params1/:action?/:id?', (req, res)=>{
     res.json(req.params);
 });
 
-// app.get('/my-params1/hello') 要放在 '/my-params1/:action?/:id?'前面才不會被擋到
-// 越特殊,嚴謹的路由要放在前面
-
 // i: case ignore,-?:選擇性的
 app.get(/\/m\/09\d{2}-?\d{3}-?\d{3}$/i, (req, res)=>{
-    // res.json(req.params);
     let u = req.url.slice(3); //去除/m/
     u = u.split('?')[0];        //去除query string ?後面的東西
     u = u.replace(/-/g, ''); //去除global的-
@@ -129,8 +123,8 @@ app.get(/\/m\/09\d{2}-?\d{3}-?\d{3}$/i, (req, res)=>{
 
 // app.use(require(__dirname + '/routes/admin2')); //簡寫成一行但可讀性差
 const admin2 = require(__dirname + '/routes/admin2');
-app.use('/admin3',admin2); // 講義路由模組化方式三:使用use，前面可以自己多加一個路徑，後面接admin.js設定的路由，因此可以方便管理
-app.use(admin2); //走原路，相當於app.use('/', admin2); ，前面是根目錄
+app.use('/admin3',admin2); 
+app.use(admin2); 
 
 app.get('/try-sess', (req, res)=>{
     req.session.my_var = req.session.my_var || 0;
@@ -166,11 +160,9 @@ app.post('/login', (req, res)=>{
         body: req.body, //除錯檢查
     }
 
-    // 有沒有值是不是個物件, 有沒有account這個欄位, 把這個帳號當作key丟到accounts就會拿到那個物件，代表帳號比對ok
     if(req.body && req.body.account && accounts[req.body.account]){
         output.code = 100;
         const item = accounts[req.body.account];
-        // 密碼核對ok //&&邏輯運算子(只有not優先權最高)，===關係運算子(優先權比較高，會先做)
         if(req.body.password && req.body.password===item.pw){ 
             
             req.session.admin = {
@@ -179,15 +171,13 @@ app.post('/login', (req, res)=>{
             }
             output.success = true;
             output.error = '';
-            output.code = 200; //這邊的自訂義200跟網頁定義的200(頁面正常就會是200)不同
-
+            output.code = 200; 
         }
     }
 
     res.json(output);
 });
 app.get('/logout', (req, res)=>{
-    //刪除req.session的admin屬性
     delete req.session.admin;
     res.redirect('/'); //轉向頁面，後面不該出現res.send,end,render等
 });

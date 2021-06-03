@@ -198,7 +198,7 @@ app.get('/try-moment', (req,res)=>{
 });
 
 app.get('/try-db', (req,res)=>{
-    db.query('SELECT * FROM `address_book` LIMIT 5')
+    db.query('SELECT * FROM `address_book` LIMIT 5') //是一個promise物件
         .then(([r])=>{
             res.json(r);
         })
@@ -207,6 +207,7 @@ app.get('/try-db', (req,res)=>{
         });
 });
 
+// 連結是/address-book/list
 app.use('/address-book', require(__dirname + '/routes/address-book'));
 
 //404路由定義，要放在所有路由的後面，避免蓋到其他的設定

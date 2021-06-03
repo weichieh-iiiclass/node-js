@@ -3,6 +3,7 @@ require('dotenv').config();  // 連環境參數
 const port = process.env.PORT || 3000;
 const express = require('express');  // 連express
 const session = require('express-session');
+const db = require(__dirname + '/modules/mysql2-connect'); //和express無關
 
 express.weichieh = '嗨嗨';
 
@@ -181,6 +182,32 @@ app.get('/logout', (req, res)=>{
     delete req.session.admin;
     res.redirect('/'); //轉向頁面，後面不該出現res.send,end,render等
 });
+
+const moment = require('moment-timezone');
+app.get('/try-moment', (req,res)=>{
+    const fm = 'YYYY-MM-DD HH:mm:ss';
+    const m1 = moment(new Date());
+    const m2 = moment('2021-03-15')
+    
+    res.json({
+        t1: m1.format(fm), //沒指定時區，會使用local時區
+        t1a: m1.tz('Europe/London').format(fm),
+        t2: m2.format(fm),
+        t2a: m2.tz('Europe/London').format(fm),
+    })
+});
+
+app.get('/try-db', (req,res)=>{
+    db.query('SELECT * FROM `address_book` LIMIT 5')
+        .then(([r])=>{
+            res.json(r);
+        })
+        .catch(error=>{
+            res.send(error);
+        });
+});
+
+app.use('/address-book', require(__dirname + '/routes/address-book'));
 
 //404路由定義，要放在所有路由的後面，避免蓋到其他的設定
 app.use((req, res) =>{ 

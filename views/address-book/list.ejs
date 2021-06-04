@@ -13,7 +13,7 @@
                         if(i>=1 && i<=totalPages)
                     { %>
                         <li class="page-item <%= i===page ? 'active' : '' %>">
-                        <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                            <a class="page-link" href="?page=<%= i %>"><%= i %></a>
                         </li>
                     <% } %>
                     <li class="page-item <%= totalPages===page ? 'disabled': '' %>">

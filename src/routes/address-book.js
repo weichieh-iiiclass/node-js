@@ -69,9 +69,67 @@ router.get('/list', async(req, res)=>{
     res.render('address-book/list', output);
 });
 
+router.get('/list2', (req, res)=>{
+    res.render('address-book/list2');
+});
+
 // 頁面2: api我們只要資料，我們不轉向，以網站規劃給手機版app使用
 router.get('/api/list', async(req, res)=>{
     res.json(await getListData(req));
+});
+
+// add
+router.get('/add', async(req, res)=>{
+    res.render('address-book/add');
+});
+
+// 作法一: 傳統的insert into
+// router.post('/add', async(req, res)=>{
+//     // res.json(req.body);
+//     const sql = "INSERT INTO `address_book`(`name`, `email`, `mobile`, `birthday`, `address`, `created_at`) VALUES (?, ?, ?, ?, ?, NOW())";
+
+//     const [results] = await db.query(sql,[
+//         req.body.name,
+//         req.body.email,
+//         req.body.mobile,
+//         req.body.birthday,
+//         req.body.address,
+//     ]);
+//     res.json({
+//         body: req.body,
+//         results
+//     });
+// });
+
+// 作法2: 較簡易偷懶
+router.post('/add', async(req, res)=>{
+    // TODO: 輸入的資料檢查
+    let output = {
+        success: false,
+        error: '',
+        insertId: 0,
+    };
+    const data = {
+        ...req.body,
+        created_at: new Date()
+    }
+    const sql = "INSERT INTO `address_book` SET ?"; //node mysql2的簡易寫法
+    const [results] = await db.query(sql,[data]);
+
+    if (results.affectedRows===1){
+        output.success = true;
+        output.insertId = results.insertId;
+    } else {
+        output.error = '資料新增失敗';
+    }
+
+    output = {...output, body: req.body };
+    res.json(output);
+});
+
+router.get('/escape', async(req, res)=>{
+    const str = "ab'c";
+    res.send(db.escape(str)); //做單引號的跳脫，同時用單引號包住str
 });
 
 module.exports = router;
@@ -91,3 +149,5 @@ module.exports = router;
 
 // app是主程式
 // router是路由模組化
+
+// 當初SQL的設定如果created_at有設定current_timestamp()作為default value這邊就不用JS寫入時間的數值了

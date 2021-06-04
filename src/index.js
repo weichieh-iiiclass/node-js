@@ -3,7 +3,11 @@ require('dotenv').config();  // 連環境參數
 const port = process.env.PORT || 3000;
 const express = require('express');  // 連express
 const session = require('express-session');
+const MysqlStore = require('express-mysql-session')(session);
+// const MysqlStore = require('express-mysql-session')(session); //require進來的同時直接呼叫
 const db = require(__dirname + '/modules/mysql2-connect'); //和express無關
+// const sessionStore = new MysqlStore({}, db); //用new建立這個類別
+const sessionStore = new MysqlStore({}, db);
 
 express.weichieh = '嗨嗨';
 
@@ -22,6 +26,8 @@ app.use(session({
     saveUninitialized: false,
     resave: false,
     secret: 'lgheuifunldaoiewaifebwfoweafewd', //加密cookie
+    // store: sessionStore,
+    store: sessionStore,
     cookie: { 
         maxAge: 1200000,
     }

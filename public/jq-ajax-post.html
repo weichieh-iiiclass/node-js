@@ -44,7 +44,7 @@
     <script src="./bootstrap/js/bootstrap.bundle.js"></script>
     <script>
         const send = () => {
-            // .serialize()把表單欄位抓進來 
+            // .serialize()把表單欄位抓進來 ，使用post只能上傳文字的表單資料
             $.post('/try-post', $(document.form1).serialize(), function (data) {
                 console.log(data);
                 // 只用一個id名稱會變成全域的變數，但不建議這樣使用

@@ -1,6 +1,7 @@
 const express = require('express');
 const moment = require('moment-timezone');
 const db = require(__dirname + '/../modules/mysql2-connect');
+const upload = require(__dirname + '/../modules/upload-img');
 
 const router = express.Router();
 
@@ -78,9 +79,9 @@ router.get('/api/list', async(req, res)=>{
     res.json(await getListData(req));
 });
 
-// add
+// add //add2:fetch
 router.get('/add', async(req, res)=>{
-    res.render('address-book/add');
+    res.render('address-book/add2');
 });
 
 // 作法一: 傳統的insert into
@@ -102,7 +103,8 @@ router.get('/add', async(req, res)=>{
 // });
 
 // 作法2: 較簡易偷懶
-router.post('/add', async(req, res)=>{
+// fetch寫法, 加middleware
+router.post('/add', upload.none(), async(req, res)=>{
     // TODO: 輸入的資料檢查
     let output = {
         success: false,
@@ -124,6 +126,55 @@ router.post('/add', async(req, res)=>{
     }
 
     output = {...output, body: req.body };
+    res.json(output);
+});
+
+// 點擊del，會連到del/:sid執行刪除再回來
+router.get('/del/:sid', async(req, res)=>{
+    // res.json([req.get('Referer'),req.headers]); //測試查看referer
+    const sql = "DELETE FROM `address_book` WHERE sid=?";
+    await db.query(sql, [req.params.sid]);
+
+    if(req.get('Referer')){
+        res.redirect(req.get('Referer'));
+    } else {
+        res.redirect('/address-book/list');
+
+    }
+});
+
+router.get('/edit/:sid', async(req, res)=>{
+    const sql = "SELECT * FROM address_book WHERE sid=?";
+    const [rs] = await db.query(sql, [req.params.sid]);
+    if(! rs.length){ //如果沒有找到資料就跳轉到列表頁
+        return res.redirect('/address-book/list');
+    } 
+    rs[0].birthday = moment(rs[0].birthday).format('YYYY-MM-DD');
+    res.render('address-book/edit', rs[0]);
+    // res.json( rs[0]);
+});
+
+router.post('/edit/:sid', upload.none(), async(req, res)=>{
+    let output = {
+        success: false,
+        type: 'danger',
+        error: '',
+        results: {},
+    }
+    const sql = "UPDATE `address_book` SET ? WHERE sid=?";
+    //塞兩個問號的資料進去進去
+    const [results] = await db.query(sql, [req.body, req.params.sid]); 
+    output.results = results;
+    // affect影響而已 change資料有變動
+    if(results.affectedRows && results.changedRows){
+        output.success = true;
+        output.type = 'success';
+    } else if(results.affectedRows){
+        output.error = '資料沒有修改';
+        output.type = 'warning';
+    } else {
+        output.error = '資料輸出發生錯誤';
+    }
     res.json(output);
 });
 

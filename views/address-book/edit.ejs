@@ -5,37 +5,36 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">新增資料</h5>
+                    <h5 class="card-title">修改資料</h5>
                     <form name="form1" method="POST" novalidate onsubmit="checkForm(); return false">
-                        <!-- <input type="hidden" name="mmm" value="555"> -->
-                        <!-- 會有error: Unknown column 'mmm' in 'field list -->
+                        <!-- <input type="hidden" name="sid" value="<%= sid %>"> -->
                         <div class="form-group">
                             <label for="name">* name</label>
                             <input type="text" class="form-control" 
-                                    id="name" name="name" required>
+                                    id="name" name="name" required value="<%= name %>">
                         </div>
                         <div class="form-group">
                             <label for="email">email</label>
                             <input type="email" class="form-control" 
-                                    id="email" name="email">
+                                    id="email" name="email" value="<%= email %>">
                         </div>
                         <div class="form-group">
                             <label for="mobile">mobile</label>
                             <input type="text" pattern="09\d{2}-?\d{3}-?\d{3}"
                                     class="form-control" 
-                                    id="mobile" name="mobile">
+                                    id="mobile" name="mobile" value="<%= mobile %>">
                         </div>
                         <div class="form-group">
                             <label for="birthday">birthday</label>
                             <input type="date" class="form-control" 
-                                    id="birthday" name="birthday">
+                                    id="birthday" name="birthday" value="<%= birthday %>">
                         </div>
                         <div class="form-group">
                             <label for="address">address</label>
-                            <textarea class="form-control" id="address" name="address" cols="20" rows="3"></textarea>                           
+                            <textarea class="form-control" id="address" name="address" cols="20" rows="3"><%= address %></textarea>                           
                         </div>
                         
-                        <button type="submit" class="btn btn-primary">新增</button>
+                        <button type="submit" class="btn btn-primary">修改</button>
                     </form>
                 </div>
             </div>
@@ -47,28 +46,37 @@
 <script>
     const infobar = $('#infobar');
 
-
     function checkForm(){
         // TODO: 檢查欄位格式 使用fetch前後端都要改
-        $.post('',$(document.form1).serialize(), function(data){ //空字串表示相同url 但使用post會到index.js的app.post
+        const fd = new FormData(document.form1);
+        fetch('',{ // ''代表相同路由
+            method: 'POST',
+            body: fd //因為是fetch所以content-type不用設定
+        })
+        .then(r=>r.json())
+        .then(data=>{
             console.log(data);
+            infobar
+                    .removeClass('alert-danger')
+                    .removeClass('alert-success')
+                    .removeClass('alert-warning')
+
             if(data.success){
                 infobar
-                    .removeClass('alert-danger')
                     .addClass('alert-success')
-                    .html('新增成功');
+                    .html('修改成功');
                 infobar.slideDown();
             } else {
                 infobar
-                    .removeClass('alert-success')
-                    .addClass('alert-danger')
+                    .addClass('alert-'+ + data.type)
                     .html(data.error);
                 infobar.slideDown();
             }
             setTimeout(()=>{
                     infobar.slideUp();
                 },5000); //3秒鐘後執行
-        }, 'json');
+        })
+
     }
 </script>
 <%- include('../parts/html-foot') %>

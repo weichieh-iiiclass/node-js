@@ -27,23 +27,37 @@
     <table class="table table-striped">
         <thead>
         <tr>
+            <th><i class="fas fa-trash-alt"></i></th>
             <th scope="col">#</th>
             <th scope="col">姓名</th>
             <th scope="col">電郵</th>
             <th scope="col">手機</th>
             <th scope="col">生日</th>
             <th scope="col">地址</th>
+            <th scope="col"><i class="fas fa-pen-square"></i></th>
+
         </tr>
         </thead>
         <tbody>
         <% for(let i of rows){ %>
         <tr>
+            <td>
+                <a href="javascript: delete_it(<%= i.sid %>)">
+                    <i class="fas fa-trash-alt"></i>
+                </a>
+
+            </td>
             <td><%= i.sid %></td>
             <td><%= i.name %></td>
             <td><%= i.email %></td>
             <td><%= i.mobile %></td>
             <td><%= i.birthday %></td>
             <td><%= i.address %></td>
+            <td> 
+                <a href="/address-book/edit/<%= i.sid %>">
+                    <i class="fas fa-pen-square"></i>
+                </a>
+            </td> 
         </tr>
         <% } %>
         </tbody>
@@ -52,4 +66,12 @@
 </div>
 
 <%- include('../parts/scripts') %> 
+<script>
+    function delete_it(sid){
+        if(confirm(`是否要移除編號為${sid}的資料`)){
+            location.href = '/address-book/del/' + sid;
+        }
+    }    
+</script>
+
 <%- include('../parts/html-foot') %>

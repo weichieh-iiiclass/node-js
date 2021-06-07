@@ -50,7 +50,13 @@
 
     function checkForm(){
         // TODO: 檢查欄位格式 使用fetch前後端都要改
-        $.post('',$(document.form1).serialize(), function(data){ //空字串表示相同url 但使用post會到index.js的app.post
+        const fd = new FormData(document.form1);
+        fetch('',{
+            method: 'POST',
+            body: fd
+        })
+        .then(r=>r.json())
+        .then(data=>{
             console.log(data);
             if(data.success){
                 infobar
@@ -68,7 +74,8 @@
             setTimeout(()=>{
                     infobar.slideUp();
                 },5000); //3秒鐘後執行
-        }, 'json');
+        })
+
     }
 </script>
 <%- include('../parts/html-foot') %>

@@ -8,6 +8,7 @@ const MysqlStore = require('express-mysql-session')(session);
 const db = require(__dirname + '/modules/mysql2-connect'); //和express無關
 // const sessionStore = new MysqlStore({}, db); //用new建立這個類別
 const sessionStore = new MysqlStore({}, db);
+const cors = require('cors');
 
 express.weichieh = '嗨嗨';
 
@@ -22,6 +23,14 @@ const app = express();
 
 app.set('view engine', 'ejs'); 
 
+// 從哪裡連過來就允許哪一台，允許傳送cookie
+const corsOptions = {
+    credentials: true,
+    origin: function(origin, cb){
+        cb(null, true);
+    }
+};
+app.use(cors(corsOptions));
 app.use(session({
     saveUninitialized: false,
     resave: false,

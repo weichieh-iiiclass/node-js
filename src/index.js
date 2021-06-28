@@ -9,6 +9,7 @@ const db = require(__dirname + '/modules/mysql2-connect'); //和express無關
 // const sessionStore = new MysqlStore({}, db); //用new建立這個類別
 const sessionStore = new MysqlStore({}, db);
 const cors = require('cors');
+const bcrypt = require('bcryptjs');
 
 express.weichieh = '嗨嗨';
 
@@ -142,40 +143,41 @@ app.get('/login', (req, res)=>{
         res.render('login');
     }
 });
-app.post('/login', (req, res)=>{
-    const accounts = {
-        wei: {
-            nickname: '小倢',
-            pw: 'wei',
-        },
-        sun: {
-            nickname: '晴晴',
-            pw: 'sun',
-        },
-    };
+app.post('/login', async(req, res)=>{
+    
     const output = {
         success: false,
         code: 0, //除錯方便追蹤
-        error: '帳號或密碼錯誤',
+        error: '沒有account或沒有password欄位',
         body: req.body, //除錯檢查
+    };
+
+    if(!req.body.account || !req.body.password){
+        return res.json(output);
     }
 
-    if(req.body && req.body.account && accounts[req.body.account]){
-        output.code = 100;
-        const item = accounts[req.body.account];
-        if(req.body.password && req.body.password===item.pw){ 
-            
-            req.session.admin = {
-                account: req.body.account,
-                ...item, //copy,nickname&password都會進來
-            }
-            output.success = true;
-            output.error = '';
-            output.code = 200; 
-        }
+    const [members] = await db.query("SELECT * FROM members WHERE `email`=?",[req.body.account]);
+
+    if(!members.length){
+        output.code = 401; //自己決定號碼
+        output.error = "沒有此帳號";
     }
+    const member = members[0];
+    const result = await bcrypt.compare(req.body.password, member.password); //req.body.password傳進來的密碼
+    if(!result){
+        output.code = 405; //自己決定號碼
+        output.error = "帳號或密碼錯誤(密碼錯誤)";
+        return res.json(output);
+    }
+
+    const {id, email, nickname} = member;
+    req.session.member = {id, email, nickname}
+    output.success = true;
+    output.error = '';
+    output.code = 200; 
 
     res.json(output);
+
 });
 app.get('/logout', (req, res)=>{
     delete req.session.admin;

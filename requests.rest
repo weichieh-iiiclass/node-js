@@ -25,3 +25,12 @@ Content-Type: application/json;charset=utf-8
     "name":"david",
     "age":28
 }
+
+###0628 member login
+POST http://localhost:3000/login
+Content-Type: application/json; charset=utf-8
+
+{
+    "account": "ming@gg.com",
+    "password": "123456"
+}

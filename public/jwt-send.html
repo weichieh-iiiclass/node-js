@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX</title>
+
+</head>
+
+<body>
+
+    <button onclick="send()">send token</button>
+    <div id="info"></div>
+    <script>
+
+        function send() {
+            const token = localStorage.getItem('token');
+
+            fetch('/jwt-verify',{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    token,
+                    test:'測試'
+                })
+            })
+            .then(r=>r.json())
+            .then(obj=>{
+                info.innerText = JSON.stringify(obj);
+            })
+        }
+    </script>
+</body>
+
+</html>

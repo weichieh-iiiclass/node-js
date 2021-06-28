@@ -189,6 +189,20 @@ app.get('/logout', (req, res)=>{
     res.redirect('/'); //轉向頁面，後面不該出現res.send,end,render等
 });
 
+app.post('/jwt-verify', (req, res)=>{
+    let payload;
+    try {
+        payload = jwt.verify(req.body.token,process.env.TOKEN_SECRET);
+        return res.json(payload);
+    } catch (ex){
+        return res.json({
+            error: ex.toString()
+        })
+    }
+    
+});
+
+
 const moment = require('moment-timezone');
 app.get('/try-moment', (req,res)=>{
     const fm = 'YYYY-MM-DD HH:mm:ss';

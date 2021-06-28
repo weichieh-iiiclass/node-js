@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX</title>
+
+</head>
+
+<body>
+    <input type="text"><br>
+    <button>test</button>
+    <button onclick="send()">send AJAX</button>
+    <script>
+
+        function send() {
+            const xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function(){
+                console.log(`readystate:${xhr.readyState}, ${xhr.status}`);
+            };
+            xhr.onload = function(event) {
+                console.log(xhr.responseText);
+            };
+            xhr.open('GET', 'alert.html', true);
+            // 發http的方法用GET, 空字串=自己的url, true=非同步(預設值，js建議使用非同步)
+            // 如果使用false=同步，網頁在pending的時候，除非server端有東西傳回來，不然就會卡在那邊，使用者沒辦法切到input欄位
+            xhr.send();
+        }
+    </script>
+</body>
+
+</html>

@@ -10,6 +10,7 @@ const db = require(__dirname + '/modules/mysql2-connect'); //和express無關
 const sessionStore = new MysqlStore({}, db);
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 express.weichieh = '嗨嗨';
 
@@ -171,7 +172,11 @@ app.post('/login', async(req, res)=>{
     }
 
     const {id, email, nickname} = member;
-    req.session.member = {id, email, nickname}
+    // req.session.member = {id, email, nickname}; //使用session
+
+    // output.token = jwt.sign({id, email, nickname},process.env.TOKEN_SECRET, {expiresIn:180000});
+    output.token = jwt.sign({id, email, nickname},process.env.TOKEN_SECRET);
+
     output.success = true;
     output.error = '';
     output.code = 200; 
@@ -180,7 +185,7 @@ app.post('/login', async(req, res)=>{
 
 });
 app.get('/logout', (req, res)=>{
-    delete req.session.admin;
+    delete req.session.member;
     res.redirect('/'); //轉向頁面，後面不該出現res.send,end,render等
 });
 

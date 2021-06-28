@@ -38,6 +38,11 @@
         $.post('',$(document.form1).serialize(), function(data){ //空字串表示相同url 但使用post會到index.js的app.post
             console.log(data);
             if(data.success){
+
+                if(data.token){
+                    localStorage.setItem('token',data.token); //'token'名字自訂
+                }
+
                 infobar
                     .removeClass('alert-danger')
                     .addClass('alert-success')

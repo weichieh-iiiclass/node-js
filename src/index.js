@@ -52,7 +52,20 @@ app.use(express.static(__dirname + '/../public')); //前面省略根目錄
 // 全域的middleware，會用到session
 app.use((req, res, next)=>{
     res.locals.admin = req.session.admin || {}; 
+
+    req.bearer = ''; //自訂屬性，要注意原本是否有這個屬性
+    let auth = req.get('Authorization'); //先拿到檔頭
+    if(auth && auth.indexOf('Bearer ')===0){ //確定有這個
+        auth = auth.slice(7);
+        try {
+            req.bearer = jwt.verify(auth, process.env.TOKEN_SECRET);
+        } catch(ex) {
+            console.log(ex);
+        }
+    }
+
     next(); //不加的話會pending
+
 });
 
 //---------- 定義路由開始 (路由一定是/開頭)---------- 
@@ -202,6 +215,12 @@ app.post('/jwt-verify', (req, res)=>{
     
 });
 
+app.get('/headers',(req, res)=>{
+    res.json({
+        headers: req.headers,
+        bearer: req.bearer
+    });
+})
 
 const moment = require('moment-timezone');
 app.get('/try-moment', (req,res)=>{

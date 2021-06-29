@@ -58,7 +58,7 @@ app.use((req, res, next)=>{
     if(auth && auth.indexOf('Bearer ')===0){ //確定有這個
         auth = auth.slice(7);
         try {
-            req.bearer = jwt.verify(auth, process.env.TOKEN_SECRET);
+            req.bearer = jwt.verify(auth, process.env.TOKEN_SECRET);//這是自己放的，原本req沒有bearer
         } catch(ex) {
             console.log(ex);
         }
@@ -214,7 +214,7 @@ app.post('/jwt-verify', (req, res)=>{
     }
     
 });
-
+// bearer
 app.get('/headers',(req, res)=>{
     res.json({
         headers: req.headers,

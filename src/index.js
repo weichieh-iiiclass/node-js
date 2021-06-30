@@ -11,6 +11,7 @@ const sessionStore = new MysqlStore({}, db);
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const Product = require('./models/Product')
 
 express.weichieh = '嗨嗨';
 
@@ -111,13 +112,24 @@ app.post('/try-upload', upload.single('avatar'), async (req, res)=>{
         });
 });
 
-// 上傳的欄位名稱叫photo，array最多一次上傳6個檔案
-app.post('/try-uploads', upload.array('photo', 6), (req, res)=>{
+app.post('/try-uploads', upload.array('photo', 6), async (req, res)=>{
     console.log(req.files);
+
+    let images = [];
+    if(req.files.length){
+        images = req.files.map(el=>el.filename);
+    }
+
+    const p9 = await Product.getItem(9)
+    p9.data.images = JSON.stringify(images);
+
+    await p9.save();
+
     res.json({
-           file: req.files,
-           body: req.body,
-        });
+        files: req.files,
+        body: req.body,
+        images,
+    });
 });
 
 app.get('/pending', (req, res)=>{
@@ -248,6 +260,7 @@ app.get('/try-db', (req,res)=>{
 
 // 連結是/address-book/list
 app.use('/address-book', require(__dirname + '/routes/address-book'));
+app.use('/products', require(__dirname + '/routes/products'));
 
 //404路由定義，要放在所有路由的後面，避免蓋到其他的設定
 app.use((req, res) =>{ 

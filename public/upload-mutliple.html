@@ -1,0 +1,52 @@
+<!-- 模擬點擊按鈕 -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+</head>
+
+<body>
+
+    <div class="container">
+        <form name="form1" style="display: none;">
+            <div class="form-group">
+                <label for="photo">大頭貼</label>
+                <input type="file" class="form-control" id="photo" name="photo" accept="image/*" multiple>
+            </div>
+        </form>
+        <button class="btn btn-primary" onclick="photo.click()">上傳檔案</button>
+        <br>
+        <div id="info"></div>
+    </div>
+
+
+    <script>
+
+        const photo = document.querySelector('#photo');
+        
+        photo.addEventListener('change', (event) => {
+            // console.log(event.target); //事件觸發的來源(最內層的元素)
+            // console.log(event.currentTarget); //註冊事件處理器的那個物件
+
+            const fd = new FormData(document.form1);
+
+            fetch('/try-uploads', {
+                method: 'POST',
+                body: fd,
+            })
+                .then(r => r.json())
+                .then(obj => {
+                    console.log(obj);
+                    info.innerText = JSON.stringify(obj);
+                });
+        });
+
+    </script>
+</body>
+
+</html>

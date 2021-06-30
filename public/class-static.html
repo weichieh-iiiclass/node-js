@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>class-static</title>
+</head>
+<body>
+    
+
+    <script>
+        // Math是類型，所以它的所有的方法都是靜態的方法
+        class User {
+            constructor(name, age) {
+                this._name = name; //為了跟下面命名區別
+                this._age = age;
+                User._total = User._total || 0; //自定義屬性
+                User._total ++;
+
+            }
+
+            // getter
+            get age(){
+                return this._age;
+            }
+
+            // setter
+            set age(a){
+                this._age = a;
+            }
+
+            toJSON(){
+                return{
+                    name: this._name,
+                    age: this._age,
+                }
+            }
+
+            toString(){
+                return JSON.stringify(this.toJSON)
+            }
+
+            // static getter (count只能讀取)，如果要設定要用setter
+            // static靜態的方法是屬於類型的方法，不是屬於物件的(u1,u2沒有count這個方法)，是自定義User這個類別裡的方法
+            static get count(){
+                return User._total;
+            }
+
+        }
+
+        let u1 = new User("jess");
+        let u2 = new User("bob");
+    </script>
+</body>
+</html>
